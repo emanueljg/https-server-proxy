@@ -8,25 +8,41 @@
     name = "https-server-proxy"; 
   in
     flake-utils.lib.eachDefaultSystem(system: let
-
       pkgs = import nixpkgs { inherit system; };
 
-      pkg = with pkgs; buildNpmPackage {
+      inherit (pkgs)
+        buildNpmPackage
+        writeShellScriptBin
+      ;
+
+
+      libPkg = (buildNpmPackage {
         inherit name;
 
         buildInputs = [
           pkgs.nodejs
         ];
 
-        #dontNpmBuild = true;
+        dontNpmBuild = true;
 
         src = ./.;
         npmDepsHash = "sha256-QQSzCBQ2RG2kJggqU/f+VQHzlJqwZpdqkz4tckdobpQ=";
-      };
+      }).overrideAttrs (_: _: { 
+        postInstall = ''
+          cat > $out/lib/node_modules/https-server-proxy/myproxy.js <<'endtextblock'
+          const proxy = require('https-reverse-proxy')
 
+          proxy('nodehill.com', {
+            'emanuel.nodehill.com': 34000,
+            'emanuel1.nodehill.com': 34001,
+            'emanuel2.nodehill.com': 34002
+          });
+          endtextblock
+        '';
+      });
     in {
-      packages.default = pkg;
-      packages.${name} = pkg;
+      packages.default = libPkg;
+      packages.${name} = libPkg;
     });
 }
 
