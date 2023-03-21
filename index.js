@@ -264,11 +264,13 @@ function createHttpsServerProxy(...args) {
     let certs = {};
     let domains = fs.readdirSync(pathToCerts);
     pathToCerts.slice(-1) === '/' || (pathToCerts += '/');
-    domains = domains.filter(x => fs.lstatSync(pathToCerts + x).isDirectory());
+    domains = domains.filter(x => fs.lstatSync(pathToCerts + x).isDirectory() &&
+                             !x.startsWith('.') &&
+                             !x.startsWith('acme'));
     for (let domain of domains) {
       let domainName = domain.split('-0')[0];
       certs[domainName] = {
-        key: fs.readFileSync(path.join(pathToCerts, domain, 'privkey.pem')),
+        key: fs.readFileSync(path.join(pathToCerts, domain, 'key.pem')),
         cert: fs.readFileSync(path.join(pathToCerts, domain, 'fullchain.pem'))
       };
       // SecureContext is needed for SNI support
