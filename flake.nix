@@ -14,11 +14,7 @@
       pkg = (pkgs.buildNpmPackage {
         inherit name;
         src = ./.;
-<<<<<<< HEAD
-        npmDepsHash = "sha256-QQSzCBQ2RG2kJggqU/f+VQHzlJqwZpdqkz4tckdob=";
-=======
         npmDepsHash = "sha256-QQSzCBQ2RG2kJggqU/f+VQHzlJqwZpdqkz4tckdobpQ=";
->>>>>>> parent of 62cf023 (Update flake.nix)
         dontNpmBuild = true;
       });
 
