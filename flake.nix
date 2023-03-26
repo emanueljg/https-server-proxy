@@ -14,7 +14,7 @@
       pkg = (pkgs.buildNpmPackage {
         inherit name;
         src = ./.;
-        npmDepsHash = "sha256-QQSzCBQ2RG2kJggqU/f+VQHzlJqwZpdqkz4tckdobp=";
+        npmDepsHash = "sha256-QQSzCBQ2RG2kJggqU/f+VQHzlJqwZpdqkz4tckdobpQ=";
         dontNpmBuild = true;
       });
 
